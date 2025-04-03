@@ -15,5 +15,5 @@ module device (
             default: out = 8'b0;            // Default case
         endcase
     end
-    this is a lint error
+
 endmodule
