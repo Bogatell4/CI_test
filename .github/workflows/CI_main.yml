@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Verilator
       run: |
@@ -40,8 +40,8 @@ jobs:
         # Run the compiled simulation
         #./obj_dir/Vtestbench    # This should be the name of the generated executable from Verilator
 
-    - name: Upload simulation logs as artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: simulation-logs
-        path: ./obj_dir/vltable.log  # This is where Verilator logs are generated
+    #- name: Upload simulation logs as artifact
+    #  uses: actions/upload-artifact@v2
+    #  with:
+    #    name: simulation-logs
+    #    path: ./obj_dir/vltable.log  # This is where Verilator logs are generated
