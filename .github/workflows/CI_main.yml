@@ -33,7 +33,7 @@ jobs:
 
     - name: all files lint only
       run: |
-        verilator --lint-only device.sv tb.sv
+        verilator --lint-only device.sv tb.sv --timing
         # Compile the Verilog/SystemVerilog code with Verilator
         # verilator --cc --trace --build src/my_design.sv tb/testbench.sv
 
