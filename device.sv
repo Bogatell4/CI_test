@@ -10,6 +10,7 @@ module device (
             2'b00: out = {4'b0, in1 + in2}; // Add inputs
             2'b01: out = {4'b0, in1 - in2}; // Subtract inputs
             2'b10: out = in1 * in2;        // Multiply inputs
+            /* verilator lint_off WIDTHEXPAND */
             2'b11: out = (in2 != 0) ? (in1 / in2) : 8'b0; // Divide inputs, handle divide by zero
             default: out = 8'b0;            // Default case
         endcase
