@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build:
+  CI_run:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y verilator g++ make
-        sudo apt-get install git help2man perl python3 make
+        sudo apt-get install help2man perl python3
         sudo apt-get install libfl2
         sudo apt-get install libfl-dev
         sudo apt-get install zlib1g zlib1g-dev
@@ -29,16 +29,19 @@ jobs:
         sudo apt-get install libgoogle-perftools-dev numactl
         sudo apt-get install perl-doc
         sudo apt-get install git autoconf flex bison
-
-
-    - name: all files lint only
+        
+    - name: Lint all files
+      run:  verilator --lint-only device.sv adder_tb.sv multiplier_tb --timing -Wno-MULTITOP
+        
+    - name: Adder test
       run: |
-        verilator --lint-only device.sv tb.sv --timing
-        # Compile the Verilog/SystemVerilog code with Verilator
-        # verilator --cc --trace --build src/my_design.sv tb/testbench.sv
+        verilator --binary device.sv adder_tb.sv --top-module adder_tb --trace --timing 
+        ./obj_dir/Vadder_tb 
 
-        # Run the compiled simulation
-        #./obj_dir/Vtestbench    # This should be the name of the generated executable from Verilator
+    - name: Multiply test
+      run: |
+        verilator --binary device.sv multiplier_tb.sv --top-module multiplier_tb --trace --timing
+        ./obj_dir/Vmultiplier_tb 
 
     #- name: Upload simulation logs as artifact
     #  uses: actions/upload-artifact@v2
