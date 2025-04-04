@@ -17,7 +17,7 @@ device dut (
 // Test sequence
 initial begin
 
-    $dumpfile("/waveform_adder.vcd"); // Specifies the VCD file name
+    $dumpfile("waveform_adder.vcd"); // Specifies the VCD file name
     $dumpvars(0, tb);          // Dumps all variables in the testbench
 
     $strobe("Time: %0t | in1: %d | in2: %d | opcode: %b | out_data: %d", $time, in1, in2, opcode, out);
