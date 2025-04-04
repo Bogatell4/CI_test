@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y verilator g++ make
-        sudo apt-get install git help2man perl python3 make
+        sudo apt-get install help2man perl python3
         sudo apt-get install libfl2
         sudo apt-get install libfl-dev
         sudo apt-get install zlib1g zlib1g-dev
@@ -30,11 +30,41 @@ jobs:
         sudo apt-get install perl-doc
         sudo apt-get install git autoconf flex bison
 
+    - name: Cache Verilator
+      uses: actions/cache@v3
+      with: 
+          path: /usr/bin/verilator
+          key: verilator-${{ runner.os }}-${{ hashFiles('**/verilator') }}
 
-    - name: Lint all files
-      run:  verilator --lint-only device.sv adder_tb.sv multiplier_tb --timing -Wno-MULTITOP
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Restore Cached Verilator
+        uses: actions/cache@v3
+        with:
+          path: /usr/bin/verilator
+          key: verilator-${{ runner.os }}-${{ hashFiles('**/verilator') }}
+          
+      - name: Lint all files
+        run:  verilator --lint-only device.sv adder_tb.sv multiplier_tb --timing -Wno-MULTITOP
+        
+  tests:
+    runs-on: ubuntu-latest
+    needs: [setup, lint]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
+    - name: Restore Cached Verilator
+      uses: actions/cache@v3
+      with:
+        path: /usr/bin/verilator
+        key: verilator-${{ runner.os }}-${{ hashFiles('**/verilator') }}
+        
     - name: Adder test
       run: |
         verilator --binary device.sv adder_tb.sv --top-module adder_tb --trace --timing 
