@@ -10,7 +10,7 @@ on:
 
 jobs:
   setup:
-    runs-on: &C_ubuntu ubuntu-latest
+    runs-on: &Cubuntu ubuntu-latest
 
     steps:
     - name: Checkout code
@@ -38,7 +38,7 @@ jobs:
 
   lint:
     needs: setup
-    runs-on: *C_ubuntu
+    runs-on: *Cubuntu
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -53,7 +53,7 @@ jobs:
         run:  verilator --lint-only device.sv adder_tb.sv multiplier_tb --timing -Wno-MULTITOP
         
   tests:
-    runs-on: *C_ubuntu
+    runs-on: *Cubuntu
     needs: [setup, lint]
     steps:
     - name: Checkout code
