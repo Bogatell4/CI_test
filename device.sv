@@ -11,7 +11,7 @@ module device (
             2'b00: out = in1 + in2; // Add inputs
             2'b01: out = in1 - in2; // Subtract inputs
             2'b10: out = in1 * in2;        // Multiply inputs
-            2'b11: out = (in2 != 0) ? ((in1 / in2) +1) : 8'b0; // Divide inputs, handle divide by zero
+            2'b11: out = (in2 != 0) ? (in1 / in2) : 8'b0; // Divide inputs, handle divide by zero
             //verilator lint_on WIDTHEXPAND
             default: out = 8'b0;            // Default case
         endcase
