@@ -31,14 +31,19 @@ jobs:
         sudo apt-get install git autoconf flex bison
 
 
-    - name: all files lint only
-      run: |
-        verilator --lint-only device.sv tb.sv --timing
-        # Compile the Verilog/SystemVerilog code with Verilator
-        # verilator --cc --trace --build src/my_design.sv tb/testbench.sv
+    - name: Lint all files
+      run:  verilator --lint-only device.sv adder_tb.sv multiplier_tb --timing
 
-        # Run the compiled simulation
-        #./obj_dir/Vtestbench    # This should be the name of the generated executable from Verilator
+
+    - name: Adder test
+      run: |
+        verilator --binary device.sv adder_tb.sv --top-module adder_tb --trace --timing 
+        ./obj_dir/Vadder_tb 
+
+    - name: Multiply test
+      run: |
+        verilator --binary device.sv multiplier_tb.sv --top-module multiplier_tb --trace --timing
+        ./obj_dir/Vmultiplier_tb 
 
     #- name: Upload simulation logs as artifact
     #  uses: actions/upload-artifact@v2
