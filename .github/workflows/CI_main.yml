@@ -32,7 +32,7 @@ jobs:
 
 
     - name: Lint all files
-      run:  verilator --lint-only device.sv adder_tb.sv multiplier_tb --timing
+      run:  verilator --lint-only device.sv adder_tb.sv multiplier_tb --timing -Wno-MULTITOP
 
 
     - name: Adder test
