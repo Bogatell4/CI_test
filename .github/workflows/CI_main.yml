@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  setup:
-    runs-on: &Cubuntu ubuntu-latest
+  CIrun:
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
@@ -29,41 +29,9 @@ jobs:
         sudo apt-get install libgoogle-perftools-dev numactl
         sudo apt-get install perl-doc
         sudo apt-get install git autoconf flex bison
-
-    - name: Cache Verilator
-      uses: actions/cache@v3
-      with: 
-          path: /usr/bin/verilator
-          key: verilator-${{ runner.os }}-${{ hashFiles('**/verilator') }}
-
-  lint:
-    needs: setup
-    runs-on: *Cubuntu
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Restore Cached Verilator
-        uses: actions/cache@v3
-        with:
-          path: /usr/bin/verilator
-          key: verilator-${{ runner.os }}-${{ hashFiles('**/verilator') }}
-          
-      - name: Lint all files
-        run:  verilator --lint-only device.sv adder_tb.sv multiplier_tb --timing -Wno-MULTITOP
         
-  tests:
-    runs-on: *Cubuntu
-    needs: [setup, lint]
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Restore Cached Verilator
-      uses: actions/cache@v3
-      with:
-        path: /usr/bin/verilator
-        key: verilator-${{ runner.os }}-${{ hashFiles('**/verilator') }}
+    - name: Lint all files
+      run:  verilator --lint-only device.sv adder_tb.sv multiplier_tb --timing -Wno-MULTITOP
         
     - name: Adder test
       run: |
